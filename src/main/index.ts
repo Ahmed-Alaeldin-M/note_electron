@@ -2,6 +2,8 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { createNote, deletNote, getNotes, readNotes,writeNotes } from '@/lib'
+import { CreateNote, DeleteNote, GetNotes, ReadNotes,WriteNote } from '@shared/types'
 
 function createWindow(): void {
   // Create the browser window.
@@ -14,7 +16,8 @@ function createWindow(): void {
     center:true,
     title:"Note App",
     frame:false,
-    transparent:true,
+    // transparent:true,
+    backgroundMaterial: 'acrylic', 
     vibrancy:"under-window",
     visualEffectState:"active",
     titleBarStyle:"hidden",
@@ -26,7 +29,7 @@ function createWindow(): void {
       nodeIntegration:true
     }
   })
-
+ 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
@@ -51,7 +54,12 @@ function createWindow(): void {
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
-
+  ipcMain.handle('getNotes',(_,...args:Parameters<GetNotes>)=>getNotes(...args))
+  ipcMain.handle('readNotes',(_,...args:Parameters<ReadNotes>)=>readNotes(...args))
+  ipcMain.handle('writeNotes',(_,...args:Parameters<WriteNote>) => writeNotes(...args))
+  ipcMain.handle('createNotes',(_,...args:Parameters<CreateNote>) => createNote(...args))
+  ipcMain.handle('deleteNotes',(_,...args:Parameters<DeleteNote>) => deletNote(...args))
+  
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
   // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
