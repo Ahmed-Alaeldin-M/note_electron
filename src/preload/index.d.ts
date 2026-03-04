@@ -4,7 +4,7 @@ import { CreateNote, DeleteNote, GetNotes, ReadNotes, WriteNote } from '@shared/
 declare global {
   interface Window {
    context:{
-    loacle:string
+    locale:string
     getNotes:GetNotes
     readNotes:ReadNotes
     writeNotes:WriteNote
